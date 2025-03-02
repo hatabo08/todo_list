@@ -13,7 +13,7 @@ class TodoController extends Controller
     public function index()
     {
         $todos = Todo::all();
-        return view('todos.index', ['todo' => $todos]);
+        return view('todos.index', ['todos' => $todos]);
     }
 
     /**
@@ -25,7 +25,7 @@ class TodoController extends Controller
     }
 
     /**
-     * 
+     * データを保存する
      */
     public function store(Request $request)
     {
