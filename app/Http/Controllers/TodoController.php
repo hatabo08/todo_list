@@ -8,16 +8,16 @@ use App\Models\Todo;
 class TodoController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Todomodelからのデータを$todoに入れてtodo(viewの変数)に渡してindex.blade.phpを表示する
      */
     public function index()
     {
         $todos = Todo::all();
-        return view('todos.index', ['todos' => $todos]);
+        return view('todos.index', ['todo' => $todos]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * 新しいタスクを押すとcreate.blade.phpを表示する
      */
     public function create()
     {
@@ -25,7 +25,7 @@ class TodoController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * 
      */
     public function store(Request $request)
     {
@@ -40,7 +40,7 @@ class TodoController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * $todoからtodo(viewの変数)にデータを渡してshow.blade.phpを表示する
      */
     public function show(Todo $todo)
     {
@@ -48,7 +48,7 @@ class TodoController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * $todoからtodo(viewの変数)にデータを渡してedit.blade.phpを表示する
      */
     public function edit(Todo $todo)
     {
@@ -56,7 +56,7 @@ class TodoController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * todolistを更新する
      */
     public function update(Request $request, Todo $todo)
     {
@@ -72,7 +72,7 @@ class TodoController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * todolistを削除する
      */
     public function destroy(Todo $todo)
     {
@@ -80,16 +80,4 @@ class TodoController extends Controller
         return redirect()->route('todos.index')->with('success','タスクを削除しました！');
     }
 
-    public function updateDescription(Request $request, Todo $todo)
-    {
-        $request->validate([
-            'description' => 'nullable|string|max:500',
-        ]);
-
-        $todo->update([
-            'description' => $request->description,
-        ]);
-
-        return response()->json(['success' => true, 'message' => '説明を更新しました！']);
-    }
 }

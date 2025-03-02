@@ -15,39 +15,6 @@
                     <button type="submit">削除</button>
                 </form>
             </li>
-        @endforeach
-    </ul>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            document.querySelectorAll('.description-input').forEach(input => {
-                input.addEventListener('keypress', function(e) {
-                    if (e.key === 'Enter') {
-                        e.preventDefault();
-                        let TodoId = this.dataset.id;
-                        let newDescription = this.value;
-
-                        
-                        fetch(`/todos/${todoId}/update-description`, {
-                            method: 'POST',
-                            headers: {
-                                'Content-Type': 'application/json',
-                                'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                            },
-                            body: JSON.stringify({ description: newDescription })
-                        })
-                        .then(response => response.json())
-                        .then(data => {
-                            if (data.success) {
-                                alert('説明を更新しました！');
-                            }
-                        })
-                        .catch(error => console.error('Error:', error));
-                    }
-                });
-            });
-        });
-    </script>
-                        
-                
+        @endforeach 
+    </ul>              
 @endsection
