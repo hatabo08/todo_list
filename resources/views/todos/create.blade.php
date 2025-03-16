@@ -18,5 +18,6 @@
         </select>
 
         <button type="submit">追加</button>
+        
     </form>
 @endsection

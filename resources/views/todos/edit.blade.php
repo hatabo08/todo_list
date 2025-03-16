@@ -1,9 +1,10 @@
 @extends('layout')
 
 @section('content')
-    <h1>タスクを編集 ✏️</h1>
+    <h1>タスクを編集</h1>
 
-    <form action="{{ route('todos.update', $todo->id) }}" method="POST">
+    <form action="{{ route('todos.update', ['todo' => $todo->id])
+ }}" method="POST">
         @csrf
         @method('PUT')
 
@@ -21,5 +22,6 @@
         </select>
 
         <button type="submit">更新</button>
+        <a href="{{ route('todos.index') }}"><button>一覧に戻る</button></a>
     </form>
 @endsection

@@ -2,13 +2,13 @@
 
 @section('content')
     <h1>ToDoリスト</h1>
-    <a href="{{ route('todos.create') }}">新しいタスクを追加</a>
+    <a href="{{ route('todos.create') }}"><button>新しいタスクを追加</button></a>
     <ul>
         @foreach ($todos as $todo)
             <li>
-                <strong>{{ $todo->title }}</strong> - {{ $todo->status }}
-                <a href="{{route('todos.show',$todos) }}">詳細</a>
-                <a href="{{ route('todos.edit', $todos) }}">編集</a>
+                <p>{{ $todo->title }}-{{ $todo->status }}</p>
+                <a href="{{route('todos.show',$todos) }}"><button>詳細</button></a>
+                <a href="{{ route('todos.edit', $todos) }}"><button>編集</button></a>
                 <form action="{{ route('todos.destroy', $todos) }}" method="POST" style="display:inline;">
                     @csrf
                     @method('DELETE')
