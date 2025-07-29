@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <h1>タスクを編集</h1>
+    <h1>編集</h1>
 
     <form action="{{ route('todos.update', ['todo' => $todo->id])
  }}" method="POST">

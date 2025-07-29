@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <h1>タスクの詳細</h1>
+    <h1>詳細</h1>
 
     <p><strong>タイトル:</strong> {{ $todo->title }}</p>
     <p><strong>詳細:</strong> {{ $todo->description ?? 'なし' }}</p>
