@@ -1,8 +1,21 @@
 @extends('layout')
 
 @section('content')
+ @auth
+        <form method="POST" action="{{ route('logout') }}">
+            @csrf
+            <button type="submit">ログアウト</button>
+        </form>
+    
+    @endauth
     <h1>ToDoリスト</h1>
     <a href="{{ route('todos.create') }}"><button>新しいタスクを追加</button></a>
+    <p>並び替え:
+    <a href="{{ route('todos.index', ['sort' => 'title']) }}">タイトル順</a> |
+    <a href="{{ route('todos.index', ['sort' => 'created_at']) }}">作成日順</a> |
+    <a href="{{ route('todos.index', ['sort' => 'status']) }}">ステータス順</a>
+</p>
+ 
     <ul>{{-- $todoが$todosからデータを一つずつ取り出す。--}}
         @foreach ($todos as $todo) 
             <li>
@@ -17,5 +30,10 @@
                 </form>
             </li>
         @endforeach 
-    </ul>              
+    </ul>     
+    
+
+    
+   
+     
 @endsection

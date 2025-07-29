@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-    <h1>新しいタスクを追加</h1>
+    <h1>追加</h1>
 
     <form action="{{ route('todos.store') }}" method="POST">
         @csrf
