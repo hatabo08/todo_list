@@ -11,15 +11,35 @@ use App\Http\Requests\UpdateTodoRequest;
 
 class TodoController extends Controller
 {
-    /**
-     * Todomodelからのデータを$todoに入れてtodo(viewの変数)に渡してindex.blade.phpを表示する
-     */
-    public function index(Request $request) 
-    {    $sort=$request->query('sort', 'created_at');
-         
-        $todos = Auth::user()->todos()->orderBy($sort, 'asc')->get();dd($todos);
-        return view('todos.index', ['todos' => $todos]);
-    }//query=?以降の部分を読み込む関数
+    
+    
+    public function index(Request $request)
+{
+    
+    $sort = $request->query('todos', 'created_at');
+    $direction = $request->query('direction', 'asc'); 
+
+    
+    $status = $request->query('status');
+
+    $query = Todo::query();
+
+    
+    if (!empty($status)) {
+        $query->where('status', $status);
+    }
+
+    
+    $query->orderBy($sort, $direction);
+
+    
+    $todos = $query->paginate(5)->withQueryString();
+
+    return view('todos.index', ['todos' => $todos]);
+
+
+
+    }
 
     /**
      * 新しいタスクを押すとcreate.blade.phpを表示する
