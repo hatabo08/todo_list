@@ -11,12 +11,10 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('Todos', function (Blueprint $table) {
-            $table->id();
-            $table->string('title');
-            $table->text('description')->nullable();
-            $table->enum('status', ['未着手', '進行中', '完了'])->default('未着手');
-            $table->timestamps();
+        Schema::create('tags', function (Blueprint $table) {
+            $table->id(); 
+            $table->string('name'); 
+            $table->timestamps(); 
         });
     }
 
@@ -25,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('Todos');
+        Schema::dropIfExists('tags');
     }
 };
