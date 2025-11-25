@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Http\Requests\StoreTodoRequest;
 use App\Http\Requests\UpdateTodoRequest;
 use App\Models\Tag;
+use App\Models\Category;
 
 
 class TodoController extends Controller
@@ -34,18 +35,15 @@ class TodoController extends Controller
         return view('todos.index', ['todos' => $todos]);
     }
 
-    /**
-     * 新しいタスクを押すとcreate.blade.phpを表示する
-     */
+
     public function create()
     {
         $tags = Tag::all();
-        return view('todos.create', ['tags' => $tags]);
+        $categorys = Category::all();
+        return view('todos.create', ['tags' => $tags, 'categorys' => $categorys]);
     }
 
-    /**
-     * データを保存する
-     */
+
     public function store(StoreTodoRequest $request)
     {
         //''title'=カラム名 title=bladeのname
@@ -53,6 +51,7 @@ class TodoController extends Controller
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
+            'category_id' => $request->category_id,
         ]);
 
         $todo->tags()->sync($request->input('tags', []));
@@ -60,38 +59,34 @@ class TodoController extends Controller
         return redirect()->route('todos.index')->with('success', 'todoを追加しました');
     }
 
-    /**
-     * $todoからtodo(viewの変数)にデータを渡してshow.blade.phpを表示する
-     */
     public function show(Todo $todo)
-    { //例えばid1の人のデータが$todoに入る
+    {
         $todo->load('tags');
-        //loadは必要な時にデータをとる
+        //loadは事前にデータをとる
         $tags = Tag::all();
 
-        return view('todos.show', ['todo' => $todo, 'tags' => $tags]);
+        $categorys = Category::all();
+
+        return view('todos.show', ['todo' => $todo, 'tags' => $tags, 'categorys' => $categorys]);
     }
 
-    /**
-     * $todoからtodo(viewの変数)にデータを渡してedit.blade.phpを表示する
-     */
+
     public function edit(Todo $todo)
-    { //例えばid1の人のデータが$todoに入る
-        $todo->load('tags');
+    {
+        $todo->load('tags', 'category');
         $tags = Tag::all();
-        //$selected = $todo->tags()->pluck('tags.id')->toArray();
-        return view('todos.edit', ['todo' => $todo, 'tags' => $tags]);
+        $categorys = Category::all();
+        $selected = $todo->tags()->pluck('tags.id')->toArray();
+        return view('todos.edit', ['todo' => $todo, 'tags' => $tags, 'categorys' => $categorys, 'selected' => $selected,]);
     }
 
-    /**
-     * todolistを更新する
-     */
     public function update(UpdateTodoRequest $request, Todo $todo)
     {
         $todo->update([
             'title' => $request->title,
             'description' => $request->description,
             'status' => $request->status,
+            'category_id' => $request->category_id,
         ]);
 
         $todo->tags()->sync($request->input('tags', []));
@@ -99,30 +94,10 @@ class TodoController extends Controller
         return redirect()->route('todos.index')->with('success', 'todoを更新しました');
     }
 
-    /**
-     * todolistを削除する
-     */
     public function destroy(Todo $todo)
-    { //例えばid1の人のデータが$todoに入る
-        $todo->delete();
-        return redirect()->route('todos.index')->with('success', 'todoを削除しました');
-    }
-
-    public function attachTag(Request $request, Todo $todo)
-    {
-        $data = $request->validate([
-            'tag_id' => ['required', 'integer', 'exists:tags,id'],
-        ]);
-
-        $todo->tags()->syncWithoutDetaching([$data['tag_id']]);
-//
-        return back()->with('success', 'タグを追加しました！');
-    }
-
-    public function detachTag(Todo $todo, Tag $tag)
-    {
-        $todo->tags()->detach($tag->id);
-
-        return back()->with('success', 'タグを外しました！');
+    { {
+            $todo->delete();
+            return redirect()->route('todos.index')->with('success', 'todoを削除しました');
+        }
     }
 }

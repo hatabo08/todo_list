@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\TodoController;
 use App\Http\Controllers\TagController;
+use App\Http\Controllers\CategoryController;
 use Illuminate\Support\Facades\Auth;
 
 Route::get('/dashboard', function () {
@@ -43,9 +44,17 @@ Route::put('/tags/{tag}', [TagController::class, 'update'])->name('tags.update')
 
 Route::delete('/tags/{tag}', [TagController::class, 'destroy'])->name('tags.destroy');
 
-Route::post('/todos/{todo}/tags/attach', [TodoController::class, 'attachTag'])->name('todos.tags.attach');
+Route::get('/categorys', [CategoryController::class, 'index'])->name('categorys.index');
 
-Route::delete('/todos/{todo}/tags/{tag}', [TodoController::class, 'detachTag'])->name('todos.tags.detach');
+Route::get('/categorys/create', [CategoryController::class, 'create'])->name('categorys.create');
+
+Route::post('/categorys', [CategoryController::class, 'store'])->name('categorys.store');
+
+Route::get('/categorys/{category}/edit', [CategoryController::class, 'edit'])->name('categorys.edit');
+
+Route::put('/categorys/{category}', [CategoryController::class, 'update'])->name('categorys.update');
+
+Route::delete('/categorys/{category}', [CategoryController::class, 'destroy'])->name('categorys.destroy');
 
 Route::post('/logout', function () {
     Auth::logout();

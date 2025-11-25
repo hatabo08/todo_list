@@ -11,11 +11,11 @@
   </ul>
 </div>
 @endif
-<form action="{{ route('tags.update', $tag) }}" method="POST">
+<form action="{{ route('categorys.update', $category) }}" method="POST">
   @csrf
   @method('PUT')
-  <input type="text" name="name" value="{{ $tag->name }}">
+  <input type="text" name="name" value="{{ $category->name }}">
   <button type="submit">更新</button>
 </form>
-<a href="{{ route('tags.index') }}"><button type="button">タグ一覧へ</button></a>
+<a href="{{ route('categorys.index') }}"><button type="button">カテゴリー一覧へ</button></a>
 @endsection

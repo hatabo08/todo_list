@@ -1,7 +1,7 @@
 @extends('layout')
 
 @section('content')
-<h1>タグ作成</h1>
+<h1>カテゴリー作成</h1>
 
 @if ($errors->any())
 <div style="color:red;">
@@ -13,12 +13,12 @@
 </div>
 @endif
 
-<form action="{{ route('tags.store') }}" method="POST">
+<form action="{{ route('categorys.store') }}" method="POST">
   @csrf
-  <label>タグ名</label>
+  <label>カテゴリー名</label>
   <input type="text" name="name" value="{{ old('name') }}">
   <button type="submit">追加</button>
 </form>
 
-<a href="{{ route('tags.index') }}"><button type="button">タグ一覧へ</button></a>
+<a href="{{ route('categorys.index') }}"><button type="button">カテゴリー一覧へ</button></a>
 @endsection

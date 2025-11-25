@@ -8,9 +8,11 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Todo extends Model
 {
     use HasFactory;
-    // TODO:fillableの逆を使う
-    protected $guarded = [
-        'id',
+    protected $fillable = [
+        'title',
+        'description',
+        'status',
+        'category_id',
     ];
     public function user()
     { // このToDoは誰のものかをLaravelに教えてる
@@ -22,5 +24,10 @@ class Todo extends Model
     public function tags()
     {
         return $this->belongsToMany(\App\Models\Tag::class, 'tag_todo')->withTimestamps();
+    }
+
+    public function category()
+    {
+        return $this->belongsTo(Category::class);
     }
 }
