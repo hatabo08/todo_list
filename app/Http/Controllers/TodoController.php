@@ -14,25 +14,49 @@ use App\Models\Category;
 class TodoController extends Controller
 {
 
-
     public function index(Request $request)
     {
-
         $sort = $request->query('sort', 'created_at');
 
-        $status = $request->query('filter');
+        $selectedStatus = $request->query('filter', []); 
 
-        $query = Todo::query()->with('tags');
+        $selectedTagIds = $request->input('tags', []);
 
-        if (!empty($status)) {
-            $query->where('status', $status);
+        
+        $selectedCategoryIds = $request->input('categorys', []);
+
+        $query = Todo::query()->with(['tags', 'category']);
+
+        if (!empty($selectedStatus)) {
+            $query->whereIn('status', $selectedStatus);
+        }
+
+        if (!empty($selectedTagIds)) {
+            $query->whereHas('tags', function ($q) use ($selectedTagIds) {
+                $q->whereIn('tags.id', $selectedTagIds);
+            });
+        }
+
+        if (!empty($selectedCategoryIds)) {
+            $query->whereIn('category_id', $selectedCategoryIds);
         }
 
         $query->orderBy($sort);
 
         $todos = $query->paginate(5)->withQueryString();
 
-        return view('todos.index', ['todos' => $todos]);
+        $tags = Tag::orderBy('name')->get();
+        $categorys = Category::orderBy('name')->get();
+
+        return view('todos.index', [
+            'todos' => $todos,
+            'tags' => $tags,
+            'categorys' => $categorys,
+            'selectedStatus' => $selectedStatus,
+            'selectedTagIds' => $selectedTagIds,
+            'selectedCategoryIds' => $selectedCategoryIds,
+            'sort' => $sort,
+        ]);
     }
 
 
@@ -61,7 +85,7 @@ class TodoController extends Controller
 
     public function show(Todo $todo)
     {
-        $todo->load('tags');
+        $todo->load('tags',category);
         //loadは事前にデータをとる
         $tags = Tag::all();
 
@@ -95,9 +119,8 @@ class TodoController extends Controller
     }
 
     public function destroy(Todo $todo)
-    { {
-            $todo->delete();
-            return redirect()->route('todos.index')->with('success', 'todoを削除しました');
-        }
+    {
+        $todo->delete();
+        return redirect()->route('todos.index')->with('success', 'todoを削除しました');
     }
 }
